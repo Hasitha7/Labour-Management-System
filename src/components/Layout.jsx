@@ -77,6 +77,8 @@ export const Header = () => {
     window.location.href = `/${role}/dashboard`;
   };
 
+  
+
   return (
     <header className="bg-white shadow-md fixed right-0 left-64 top-0 z-40">
       <div className="flex justify-between items-center px-8 py-4">
