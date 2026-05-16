@@ -1,7 +1,10 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 
+/* =========================
+   SIDEBAR
+========================= */
 export const Sidebar = () => {
   const location = useLocation();
   const { userRole } = useApp();
@@ -34,9 +37,19 @@ export const Sidebar = () => {
     { path: '/labourer/ratings', label: 'My Ratings', icon: '⭐' },
   ];
 
-  const links = userRole === 'admin' ? adminLinks : userRole === 'client' ? clientLinks : labourerLinks;
+  const links =
+    userRole === 'admin'
+      ? adminLinks
+      : userRole === 'client'
+      ? clientLinks
+      : labourerLinks;
+
   const isActive = (path) => location.pathname === path;
-  const roleLabel = userRole === 'labourer' ? 'Labour' : userRole.charAt(0).toUpperCase() + userRole.slice(1);
+
+  const roleLabel =
+    userRole === 'labourer'
+      ? 'Labour'
+      : userRole.charAt(0).toUpperCase() + userRole.slice(1);
 
   return (
     <div className="w-64 bg-gradient-to-b from-blue-900 to-blue-800 text-white h-screen overflow-y-auto fixed left-0 top-0">
@@ -68,21 +81,27 @@ export const Sidebar = () => {
   );
 };
 
+/* =========================
+   HEADER (FIXED)
+========================= */
 export const Header = () => {
   const { userRole, setUserRole } = useApp();
+  const navigate = useNavigate();
 
   const handleRoleChange = (role) => {
     setUserRole(role);
-    // Redirect to appropriate dashboard
-    window.location.href = `/${role}/dashboard`;
-  };
 
-  
+    // ✅ FIX: SPA navigation (NO reload)
+    navigate(`/${role}/dashboard`);
+  };
 
   return (
     <header className="bg-white shadow-md fixed right-0 left-64 top-0 z-40">
       <div className="flex justify-between items-center px-8 py-4">
-        <h2 className="text-lg font-semibold text-gray-800">Labour Management Platform</h2>
+        <h2 className="text-lg font-semibold text-gray-800">
+          Labour Management Platform
+        </h2>
+
         <div className="flex items-center gap-6">
           <div className="flex gap-2">
             {['admin', 'client', 'labourer'].map((role) => (
@@ -95,10 +114,13 @@ export const Header = () => {
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
               >
-                {role === 'labourer' ? 'Labour' : role.charAt(0).toUpperCase() + role.slice(1)}
+                {role === 'labourer'
+                  ? 'Labour'
+                  : role.charAt(0).toUpperCase() + role.slice(1)}
               </button>
             ))}
           </div>
+
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
               👤
@@ -114,12 +136,17 @@ export const Header = () => {
   );
 };
 
+/* =========================
+   LAYOUT
+========================= */
 export const Layout = ({ children }) => {
   return (
     <div className="flex">
       <Sidebar />
+
       <div className="flex-1 ml-64">
         <Header />
+
         <main className="mt-24 p-8 min-h-screen">
           {children}
         </main>
